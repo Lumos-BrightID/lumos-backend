@@ -38,7 +38,7 @@ router.post('/', function (req, res) {
             // set cookie for current request
             res
                 .status(200)
-                .cookie('token', unique, {
+                .cookie('token', contextId, {
                     expires: new Date(Date.now() + 900000) // cookie will be removed after 15 minutes
                 })
                 .json({
