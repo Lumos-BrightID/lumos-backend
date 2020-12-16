@@ -19,7 +19,7 @@ module.exports = {
             },
             twitter: {
                 type: Sequelize.STRING,
-                unique: true
+                unique: true,
                 allowNull: true,
             },
             facebook: {
