@@ -7,11 +7,11 @@ const logger = require('morgan')
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const verifyRouter = require('./routes/verify')
-const models = require('./models')
 
 const app = express()
 
 // db.sequelize.sync().then(() => 'database synced!').catch((error) => console.log(error))
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))

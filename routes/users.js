@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models/index')
-const {body, checkSchema, validationResult} = require('express-validator');
+const {checkSchema, validationResult} = require('express-validator');
 
 
 // simple middleware for checking requested body
