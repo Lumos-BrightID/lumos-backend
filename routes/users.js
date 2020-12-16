@@ -16,7 +16,7 @@ router.use(checkSchema({
         in: ['body'],
         matches: {
             options: [/\b(?:telegram|twitter|instagram|phone|email|facebook|erc20Address)\b/],
-            errorMessage: "Invalid role"
+            errorMessage: "Invalid type"
         }
     }
 }), (req, res, next) => {
@@ -34,7 +34,6 @@ router.use(checkSchema({
  */
 router.get('/check', async function (req, res) {
     const {username, type} = req.body
-
     try {
         const exists = await db.user.findOne({
             where: {

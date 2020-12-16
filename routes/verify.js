@@ -113,8 +113,7 @@ router.post('/verify', async function (req, res) {
                     const oldUser = await db.user.findOne({
                         where: {contextId: oldContext}
                     })
-                    oldUser.contextId = token
-                    await oldUser.save()
+                    !oldUser ? await CreateUser(token) : await UpdateUser(oldUser, token)
                     res.clearCookie(token)
                     res
                         .cookie('login', token, {
@@ -125,9 +124,7 @@ router.post('/verify', async function (req, res) {
                             'message': 'successfully logged in'
                         })
                 } else {
-                    const user = await db.user.create({
-                        contextId: token
-                    })
+                    await CreateUser(token)
                     res.clearCookie(token)
                     res
                         .cookie('login', token, {
@@ -142,6 +139,26 @@ router.post('/verify', async function (req, res) {
         }
     }
 })
+
+
+const CreateUser = async (token) => {
+    try {
+        await db.user.create({
+            contextId: token
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const UpdateUser = async (user, token) => {
+    try {
+        user.contextId = token
+        await user.save()
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 async function sponserUser(contextId) {
