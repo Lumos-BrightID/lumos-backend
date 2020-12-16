@@ -106,7 +106,7 @@ router.post('/verify', async function (req, res) {
             }
         } else {
             // check the context id
-            if (data.data.contextIds.includes(token)) {
+            if (data.data.contextIds.includes(token) && data.data.unique) {
                 // 💡⚡ check for older context to replace new context with old one in database 💡⚡ ¯\_(ツ)_/¯
                 if (data.data.contextIds.length > 1) {
                     const oldContext = data.data.contextIds[1]
