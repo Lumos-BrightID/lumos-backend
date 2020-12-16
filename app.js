@@ -1,3 +1,4 @@
+require('dotenv').config();
 const createError = require('http-errors')
 const express = require('express')
 const path = require('path')
@@ -8,9 +9,38 @@ const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
 const verifyRouter = require('./routes/verify')
 const pollsRouter = require('./routes/polls')
+const authRouter = require('./routes/auth')
+const jwt = require('jsonwebtoken');
+const passport = require('passport');
+const passportJWT = require('passport-jwt');
+const {FindUser} = require("./helper/UserHelper")
+
+// ExtractJwt to help extract the token
+let ExtractJwt = passportJWT.ExtractJwt;
+// JwtStrategy which is the strategy for the authentication
+let JwtStrategy = passportJWT.Strategy;
+let jwtOptions = {};
+jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+jwtOptions.secretOrKey = process.env.JWT_SECRET;
 
 
 const app = express()
+
+/**
+ * @type {JwtStrategy}
+ */
+let strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
+    console.log('payload received', jwt_payload)
+    let user = FindUser({ contextId: jwt_payload.contextId })
+    if (user) {
+        next(null, user)
+    } else {
+        next(null, false)
+    }
+});
+// use the strategy
+passport.use(strategy)
+app.use(passport.initialize())
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
@@ -18,7 +48,7 @@ app.set('view engine', 'pug')
 
 app.use(logger('dev'))
 app.use(express.json())
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({extended: true}))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -32,6 +62,7 @@ app.use('/api/', limiter)
 app.use('/', indexRouter)
 app.use('/api/login', verifyRouter)
 app.use('/api/user', usersRouter)
+app.use('/api/auth', authRouter)
 app.use('/api/poll', pollsRouter)
 
 // catch 404 and forward to error handler
