@@ -10,7 +10,7 @@ const usersRouter = require('./routes/users')
 const verifyRouter = require('./routes/verify')
 const pollsRouter = require('./routes/polls')
 const authRouter = require('./routes/auth')
-const jwt = require('jsonwebtoken');
+const checkRouter = require('./routes/check')
 const passport = require('passport');
 const passportJWT = require('passport-jwt');
 const {FindUser} = require("./helper/UserHelper")
@@ -30,7 +30,6 @@ const app = express()
  * @type {JwtStrategy}
  */
 let strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
-    console.log('payload received', jwt_payload)
     let user = FindUser({ contextId: jwt_payload.contextId })
     if (user) {
         next(null, user)
@@ -63,6 +62,7 @@ app.use('/', indexRouter)
 app.use('/api/login', verifyRouter)
 app.use('/api/user', usersRouter)
 app.use('/api/auth', authRouter)
+app.use('/api/check', checkRouter)
 app.use('/api/poll', pollsRouter)
 
 // catch 404 and forward to error handler
