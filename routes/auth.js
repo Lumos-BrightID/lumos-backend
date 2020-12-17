@@ -30,7 +30,7 @@ router.use(checkSchema({
 
 
 
-router.post('/profile', async function (req, res,next){
+router.put('/profile', async function (req, res,next){
     const {username, type} = req.body
     const user = await req.user
     if (!user){
@@ -40,17 +40,25 @@ router.post('/profile', async function (req, res,next){
     }
     // update authenticated user
     try {
-        const updatedUser = db.user.update({
+        const updatedUser = await db.user.update({
             [type]: username
         },{
             where: { id: user.dataValues.id }
         })
         res.status(200).json({
+            'code': 'UPDATED',
             'message': 'user updated'
         })
     }catch(err){
+        if(err.errors[0].validatorKey === 'not_unique'){
+            res.status(409).json({
+                'code': 'NOTUNIQE',
+                'message': 'username on this social media already verified'
+            })
+            return
+        }
         res.status(500).json({
-            'message': 'Internal server error'
+            'message': err
         })
     }
 })
