@@ -32,7 +32,7 @@ router.use(checkSchema({
 /**
  * check the user profile on the social media
  */
-router.get('/check', async function (req, res) {
+router.post('/check', async function (req, res) {
     const {username, type} = req.body
     try {
         const exists = await db.user.findOne({
@@ -43,10 +43,12 @@ router.get('/check', async function (req, res) {
         // check the query result
         if (!exists) {
             res.status(404).json({
+                'code': 'NOTFOUND',
                 'message': 'user not found or not verified yet!'
             })
         } else {
             res.status(200).json({
+                'code': 'FOUND',
                 'message': 'user is verified'
             })
         }
