@@ -43,7 +43,8 @@ router.post('/', function (req, res) {
             res
                 .status(200)
                 .cookie('token', contextId, {
-                    expires: new Date(Date.now() + 9000) // cookie will be removed after 15 minutes
+                    expires: new Date(Date.now() + 90000),// cookie will be removed after 15 minutes
+                    sameSite: true
                 })
                 .json({
                     qrCode: url,
@@ -94,15 +95,15 @@ router.post('/verify', async function (req, res) {
                 case(CAN_NOT_BE_VERIFIED):
                     res.clearCookie(token)
                     res.status(data.code).json({
+                        'code': 'CONNOT_VERIFIED',
                         'message': 'user cannot be verified'
                     })
                     break
                 case(NOT_SPONSORED):
                     if (await sponserUser(token)) {
-                        res.clearCookie(token)
                         res.status(200).json({
                              'code': 'SPONSERD',
-                            'message': 'sponserd! now you may try again'
+                             'message': 'sponserd! now you may try again'
                         })
                         break
                     }
