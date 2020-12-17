@@ -1,7 +1,7 @@
-# Welcome to bright-id 👋
+# Welcome to Lumos 👋
 ![Version](https://img.shields.io/badge/version-1.0-blue.svg?cacheSeconds=2592000)
 
-> Lumos backend written in express.js
+> Lumos project written in express.js
 
 ### ✨ [Demo](https://lumos.liara.run/)
 
@@ -13,14 +13,26 @@ npm install
 
 ## Usage
 
+> start
+
 ```sh
 npm start
 ```
 
-## Run tests
+> start development
+
 
 ```sh
 npm start:dev
+```
+
+## Run migrations
+
+> Run migrations
+--env=production or development
+
+```sh
+sequelize db:migrate --env=production
 ```
 
 ## Author
@@ -29,10 +41,3 @@ npm start:dev
 
 * Github: [@mohsen-walton](https://github.com/mohsen-walton)
 
-## Show your support
-
-Give a ⭐️ if this project helped you!
-
-
-***
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
