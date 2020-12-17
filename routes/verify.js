@@ -43,7 +43,7 @@ router.post('/', function (req, res) {
             res
                 .status(200)
                 .cookie('token', contextId, {
-                    expires: new Date(Date.now() + 900000) // cookie will be removed after 15 minutes
+                    expires: new Date(Date.now() + 9000) // cookie will be removed after 15 minutes
                 })
                 .json({
                     qrCode: url,
@@ -87,6 +87,7 @@ router.post('/verify', async function (req, res) {
                 case(CONTEXTID_NOT_FOUND):
                     res.clearCookie(token)
                     res.status(data.code).json({
+                        'code': 'CONTEXTID_NOT_FOUND',
                         'message': 'user not linked',
                     })
                     break
@@ -100,6 +101,7 @@ router.post('/verify', async function (req, res) {
                     if (await sponserUser(token)) {
                         res.clearCookie(token)
                         res.status(200).json({
+                             'code': 'SPONSERD',
                             'message': 'sponserd! now you may try again'
                         })
                         break
@@ -117,7 +119,7 @@ router.post('/verify', async function (req, res) {
                     break
             }
         } else {
-            //check the context id
+           // check the context id
             if (data.data.contextIds.includes(token) && data.data.unique) {
                 // 💡⚡ check for older context to replace new context with old one in database 💡⚡ ¯\_(ツ)_/¯
                 if (data.data.contextIds.length > 1) {
