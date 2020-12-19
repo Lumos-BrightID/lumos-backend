@@ -43,7 +43,8 @@ router.post('/', function (req, res) {
             res
                 .status(200)
                 .cookie('token', contextId, {
-                    expires: new Date(Date.now() + 90000),// cookie will be removed after 15 minutes
+                    expires: new Date(Date.now() * 900000),// cookie will be removed after 15 minutes
+                    maxAge:  900000,
                     sameSite: true
                 })
                 .json({
